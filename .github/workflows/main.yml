@@ -1,0 +1,53 @@
+name: CPM Tracker
+
+on:
+  workflow_dispatch:
+  
+  schedule:
+    - cron: '30 3-18 * * *'
+    - cron: '30 2 * * *'   # 8:00 AM IST
+    - cron: '30 3 * * *'   # 9:00 AM IST
+    - cron: '30 4 * * *'   # 10:00 AM IST
+    - cron: '30 5 * * *'   # 11:00 AM IST
+    - cron: '30 6 * * *'   # 12:00 PM IST
+    - cron: '30 7 * * *'   # 1:00 PM IST
+    - cron: '30 8 * * *'   # 2:00 PM IST
+    - cron: '30 9 * * *'   # 3:00 PM IST
+    - cron: '30 10 * * *'  # 4:00 PM IST
+    - cron: '30 11 * * *'  # 5:00 PM IST
+    - cron: '30 12 * * *'  # 6:00 PM IST
+    - cron: '30 13 * * *'  # 7:00 PM IST
+    - cron: '30 14 * * *'  # 8:00 PM IST
+    - cron: '30 15 * * *'  # 9:00 PM IST
+    - cron: '30 16 * * *'  # 10:00 PM IST
+    - cron: '30 17 * * *'  # 11:00 PM IST
+    - cron: '30 18 * * *'  # 12:00 AM IST
+jobs:
+  run-main:
+    runs-on: ubuntu-latest
+
+    env:
+      APPLICATION_NAME: ${{ secrets.APPLICATION_NAME }}
+      NETWORK_CODE: ${{ secrets.NETWORK_CODE }}
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
+      GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Create credentials file
+        run: echo "$GOOGLE_CREDENTIALS_JSON" > credentials.json
+
+      - name: Run main.py
+        run: python main.py
