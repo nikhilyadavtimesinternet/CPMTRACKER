@@ -18,11 +18,11 @@ from googleapiclient.discovery import build
 from google.oauth2.service_account import Credentials
 from googleads import errors
 import logging
-logging.basicConfig(level=logging.DEBUG)
 from oauth2client.service_account import ServiceAccountCredentials
 GOOGLE_CREDENTIALS_JSON = os.getenv('GOOGLE_CREDENTIALS_JSON')
 from Impression_Clicks_of_order import fetch_imp_clicks_and_goal
-
+OUTPUT_COLUMN = 'AK'  # column to write "total_predicted_units" into
+MAX_WORKERS = 8  
 def update_sheet_from_report(client,sheet_url, sheet_id, report_file):
     creds_json = json.loads(GOOGLE_CREDENTIALS_JSON)
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
@@ -54,12 +54,12 @@ def update_sheet_from_report(client,sheet_url, sheet_id, report_file):
         if order_name in sheet_map:
             idx = sheet_map[order_name] + 1  # sheet row number
             updates.append({
-            'range': f'I{idx}:J{idx}',
+            'range': f'S{idx}:T{idx}',
             'values': [[impressions, clicks]]
         })
 
             updates.append({
-            'range': f'T{idx}',
+            'range': f'AD{idx}',
             'values': [[viewable_imps]]
         })
             updates.append({
@@ -67,13 +67,10 @@ def update_sheet_from_report(client,sheet_url, sheet_id, report_file):
             'values': [[reach]]
         })
             updates.append({
-            'range': f'AE{idx}',
+            'range': f'AI{idx}',
             'values': [[Gam_goal]]
     })
 
-            print(f"Prepared update {order_name}")
-        else:
-            print(f"Not found {order_name}")
 
     #  Batch update only required cells
     if updates:
