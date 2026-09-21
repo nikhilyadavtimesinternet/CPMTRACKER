@@ -37,4 +37,3 @@ def fetch_valid_order_ids(sheet_url,sheet_id):
         order_name = row[0].strip()
         valid_order_id.append(order_name) 
     return valid_order_id
-
