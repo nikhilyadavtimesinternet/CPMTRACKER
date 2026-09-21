@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
   
   schedule:
-    - cron: '30 3-18 * * *'
     - cron: '30 2 * * *'   # 8:00 AM IST
     - cron: '30 3 * * *'   # 9:00 AM IST
     - cron: '30 4 * * *'   # 10:00 AM IST
